@@ -6,7 +6,7 @@
 **                     \____/_/   \__,_/_/  \___/\___/                       **
 **                                                                           **
 ** ========================================================================= **
-**    OPEN-SOURCE IMPLEMENTATION OF ORACLE DATABASE BUILT-IN DBMS_UTILITY    **
+**    OPEN SOURCE IMPLEMENTATION OF ORACLE DATABASE BUILT-IN DBMS_UTILITY    **
 ** ========================================================================= **
 ** Copyright (C) 2008-2020 by Pavel Stehule <pavel.stehule@gmail.com>        **
 ** Portions Copyright (C) 1999-2014 Jonah H. Harris <jonah.harris@gmail.com> **
