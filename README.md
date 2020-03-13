@@ -52,8 +52,8 @@ This extension provides Postgres-native implementations of the following feature
 
 Additionally, this extension provides the following features not included in Oracle Database:
 
-* [PL/Vision Compatible Library](#plvision-library) - A subset of Steven Feuerstein's once-popular library of PL/SQL functions ported to Postgres.
-* [PL/Unit Compatible Testing Framework](#plunit-framework) - A minimal implementation of the lightweight PL/SQL unit testing package ported to Postgres.
+* [PL/Vision Compatible Library](doc/third-party/plvision/README.md) - A subset of Steven Feuerstein's once-popular library of PL/SQL functions ported to Postgres.
+* [PL/Unit Compatible Testing Framework](doc/third-party/plunit/README.md) - A minimal implementation of the lightweight PL/SQL unit testing package ported to Postgres.
 
 ---
 
@@ -63,8 +63,8 @@ This extension provides the following Postgres-native implementations of data ty
 
 | Data Type | Description |
 |:------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `NVARCHAR2(n)` | A variable-length character string with a maximum length of *n characters*. |
-| `VARCHAR2(n)` | A variable-length character string with a maximum length of *n bytes*. |
+| [`NVARCHAR2(n)`](doc/built-in/datatypes/NVARCHAR2.md) | A variable-length character string with a maximum length of *n characters*. |
+| [`VARCHAR2(n)`](doc/built-in/datatypes/VARCHAR2.md) | A variable-length character string with a maximum length of *n bytes*. |
 
 Note:
 
@@ -117,18 +117,6 @@ This extension provides the following catalog views, which provide information a
 | `user_objects` | Objects owned by the user. |
 | `user_tab_columns` | Columns of user's tables and views. |
 | `user_tables` | Provides a description of the user's own relational tables |
-
----
-
-### PL/Vision Library
-
-Originally developed by well-known PL/SQL expert Steven Feuerstein, PL/Vision was a collection of PL/SQL packages and supporting SQL*Plus scripts that aided developers in buildling applications with the PL/SQL language. This extension includes a subset of this library ported to Postgres.
-
----
-
-### PL/Unit Framework
-
-[PL/Unit](https://plunit.com/) is a lightweight unit testing framework that provides the functionality to create unit tests for PL/SQL code. This extension includes a minimal implementation ported to Postgres.
 
 ---
 
