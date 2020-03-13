@@ -62,9 +62,9 @@ Additionally, this extension provides the following features not included in Ora
 This extension provides the following Postgres-native implementations of data types similar to, and compatible with, Oracle Database.
 
 | Data Type | Description |
-|:------------:|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| NVARCHAR2(n) | A variable-length character string with a maximum length of *n characters*. |
-| VARCHAR2(n) | A variable-length character string with a maximum length of *n bytes*. |
+|:------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `NVARCHAR2(n)` | A variable-length character string with a maximum length of *n characters*. |
+| `VARCHAR2(n)` | A variable-length character string with a maximum length of *n bytes*. |
 
 Note:
 
@@ -82,7 +82,17 @@ This extension provides the following Postgres-native implementations of SQL fun
 
 ### Built-in PL/SQL Packages
 
-This extension provides the following Postgres-native implementations of PL/SQL packages similar to, and compatible with, Oracle Database.
+This extension provides the following Postgres-native implementations of PL/SQL packages similar to, and compatible with, Oracle Database:
+
+| Package Name | Description |
+|:------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`DBMS_ALERT`](doc/built-in/packages/DBMS_ALERT.md) | Provides functionality for registering for, sending, and receiving alerts. |
+| [`DBMS_ASSERT`](doc/built-in/packages/DBMS_ASSERT.md) | Provides functionality for protecting user input against SQL injection. |
+| [`DBMS_OUTPUT`](doc/built-in/packages/DBMS_OUTPUT.md) | Provides functionality for buffering messages. |
+| [`DBMS_PIPE`](doc/built-in/packages/DBMS_PIPE.md) | Provides functionality for sending messages between sessions through a pipe. |
+| [`DBMS_RANDOM`](doc/built-in/packages/DBMS_RANDOM.md) | Provides functionality for generating random values. |
+| [`DBMS_UTILITY`](doc/built-in/packages/DBMS_UTILITY.md) | Provides miscellaneous functionality. |
+| [`UTL_FILE`](doc/built-in/packages/UTL_FILE.md) | Provides functionality for reading from, and writing to, operating system files. |
 
 ---
 
@@ -92,7 +102,21 @@ This extension provides the following Postgres-native implementations of schema 
 
 ### DUAL Table
 
+As the FROM clause is a mandatory component of queries in Oracle Database, the DUAL table is used for cases where no table name is necessary. While Postgres does not require this clause, the DUAL table has been re-created to permit compatibility with common SQL queries.
+
 ### Catalog Views
+
+This extension provides the following catalog views, which provide information about Postgres database objects in a format compatible with the commonly-used Oracle Database data dictionary:
+
+| View | Description |
+|:------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `dba_segments` | Storage allocated for all database segments. |
+| `product_componenent_version` | Version and status information for component products. |
+| `user_cons_columns` | Information about accessible columns in constraint definitions. |
+| `user_constraints` | Constraint definitions on user's own tables. |
+| `user_objects` | Objects owned by the user. |
+| `user_tab_columns` | Columns of user's tables and views. |
+| `user_tables` | Provides a description of the user's own relational tables |
 
 ---
 
