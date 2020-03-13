@@ -52,8 +52,8 @@ This extension provides Postgres-native implementations of the following feature
 
 Additionally, this extension provides the following features not included in Oracle Database:
 
-* [PL/Vision Compatible Library](doc/third-party/plvision/README.md) - A subset of Steven Feuerstein's once-popular library of PL/SQL functions ported to Postgres.
-* [PL/Unit Compatible Testing Framework](doc/third-party/plunit/README.md) - A minimal implementation of the lightweight PL/SQL unit testing package ported to Postgres.
+* [PL/Vision Compatible Library](documentation/docs/third-party/plvision/README.md) - A subset of Steven Feuerstein's once-popular library of PL/SQL functions ported to Postgres.
+* [PL/Unit Compatible Testing Framework](documentation/docs/third-party/plunit/README.md) - A minimal implementation of the lightweight PL/SQL unit testing package ported to Postgres.
 
 ---
 
@@ -63,8 +63,8 @@ This extension provides the following Postgres-native implementations of data ty
 
 | Data Type | Description |
 |:------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [`NVARCHAR2(n)`](doc/built-in/datatypes/NVARCHAR2.md) | A variable-length character string with a maximum length of *n characters*. |
-| [`VARCHAR2(n)`](doc/built-in/datatypes/VARCHAR2.md) | A variable-length character string with a maximum length of *n bytes*. |
+| [`NVARCHAR2(n)`](documentation/docs/built-in/datatypes/NVARCHAR2.md) | A variable-length character string with a maximum length of *n characters*. |
+| [`VARCHAR2(n)`](documentation/docs/built-in/datatypes/VARCHAR2.md) | A variable-length character string with a maximum length of *n bytes*. |
 
 Note:
 
@@ -86,13 +86,13 @@ This extension provides the following Postgres-native implementations of PL/SQL 
 
 | Package Name | Description |
 |:------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [`DBMS_ALERT`](doc/built-in/packages/DBMS_ALERT.md) | Provides functionality for registering for, sending, and receiving alerts. |
-| [`DBMS_ASSERT`](doc/built-in/packages/DBMS_ASSERT.md) | Provides functionality for protecting user input against SQL injection. |
-| [`DBMS_OUTPUT`](doc/built-in/packages/DBMS_OUTPUT.md) | Provides functionality for buffering messages. |
-| [`DBMS_PIPE`](doc/built-in/packages/DBMS_PIPE.md) | Provides functionality for sending messages between sessions through a pipe. |
-| [`DBMS_RANDOM`](doc/built-in/packages/DBMS_RANDOM.md) | Provides functionality for generating random values. |
-| [`DBMS_UTILITY`](doc/built-in/packages/DBMS_UTILITY.md) | Provides miscellaneous functionality. |
-| [`UTL_FILE`](doc/built-in/packages/UTL_FILE.md) | Provides functionality for reading from, and writing to, operating system files. |
+| [`DBMS_ALERT`](documentation/docs/built-in/packages/DBMS_ALERT.md) | Provides functionality for registering for, sending, and receiving alerts. |
+| [`DBMS_ASSERT`](documentation/docs/built-in/packages/DBMS_ASSERT.md) | Provides functionality for protecting user input against SQL injection. |
+| [`DBMS_OUTPUT`](documentation/docs/built-in/packages/DBMS_OUTPUT.md) | Provides functionality for buffering messages. |
+| [`DBMS_PIPE`](documentation/docs/built-in/packages/DBMS_PIPE.md) | Provides functionality for sending messages between sessions through a pipe. |
+| [`DBMS_RANDOM`](documentation/docs/built-in/packages/DBMS_RANDOM.md) | Provides functionality for generating random values. |
+| [`DBMS_UTILITY`](documentation/docs/built-in/packages/DBMS_UTILITY.md) | Provides miscellaneous functionality. |
+| [`UTL_FILE`](documentation/docs/built-in/packages/UTL_FILE.md) | Provides functionality for reading from, and writing to, operating system files. |
 
 ---
 

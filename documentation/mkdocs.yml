@@ -1,0 +1,34 @@
+site_name: Orafce PostgreSQL Extension
+theme: readthedocs
+pages:
+  - 'Welcome': index.md
+  - 'About': about.md
+  - 'Quickstart': quickstart.md
+  - Installation and configuration:
+    - 'Prerequisites': installation/prerequisites.md
+    - 'Installation': installation/installation.md
+    - 'Build From Source': installation/build.md
+  - Oracle Database Built-ins:
+    - Data Types:
+      - 'NVARCHAR2': built-in/datatypes/NVARCHAR2.md
+      - 'VARCHAR2': built-in/datatypes/VARCHAR2.md
+    - Schema Objects:
+      - '...': placeholder.md
+    - SQL Functions:
+      - '...': placeholder.md
+    - PL/SQL Packages:
+      - 'DBMS_ALERT': built-in/packages/DBMS_ALERT.md
+      - 'DBMS_ASSERT': built-in/packages/DBMS_ASSERT.md
+      - 'DBMS_OUTPUT': built-in/packages/DBMS_OUTPUT.md
+      - 'DBMS_PIPE': built-in/packages/DBMS_PIPE.md
+      - 'DBMS_RANDOM': built-in/packages/DBMS_RANDOM.md
+      - 'DBMS_UTILITY': built-in/packages/DBMS_UTILITY.md
+      - 'UTL_FILE': built-in/packages/UTL_FILE.md
+  - Third Party Libraries:
+    - 'PL/Unit Framework': third-party/plunit/README.md
+    - 'PL/Vision Library': third-party/plvision/README.md
+  - Configuration:
+    - '...': placeholder.md
+  - 'Trouble Shooting': trouble-shooting.md
+  - 'FAQ': faq.md
+  - 'Glossary': glossary.md
