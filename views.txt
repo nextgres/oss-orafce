@@ -1,7 +1,0 @@
-| dba_segments | ... |
-| product_componenent_version | ... |
-| user_cons_columns | ... |
-| user_constraints | ... |
-| user_objects | ... |
-| user_tab_columns | ... |
-| user_tables | ... |
