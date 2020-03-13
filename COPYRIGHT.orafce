@@ -1,6 +1,8 @@
 0-clause license ("Zero Clause BSD")
 
 Copyright (C) 2008-2020 by Pavel Stehule <pavel.stehule@gmail.com>
+Portions Copyright (C) 1999-2014 Jonah H. Harris <jonah.harris@gmail.com>
+Portions Copyright (C) 2014-2020 NEXTGRES, LLC. <oss@nextgres.com>
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
 with or without fee is hereby granted.

@@ -1,10 +1,9 @@
-
 #ifndef ORAFCE_BUILTINS
 #define ORAFCE_BUILTINS
 
 #ifndef PGDLLEXPORT
 #ifdef _MSC_VER
-#define PGDLLEXPORT	__declspec(dllexport)
+#define PGDLLEXPORT    __declspec(dllexport)
 
 /*
  * PG_MODULE_MAGIC and PG_FUNCTION_INFO_V1 macros are broken for MSVC.
@@ -12,29 +11,30 @@
  */
 
 #undef PG_MODULE_MAGIC
-#define PG_MODULE_MAGIC \
-extern PGDLLEXPORT const Pg_magic_struct *PG_MAGIC_FUNCTION_NAME(void); \
-const Pg_magic_struct * \
-PG_MAGIC_FUNCTION_NAME(void) \
-{ \
-	static const Pg_magic_struct Pg_magic_data = PG_MODULE_MAGIC_DATA; \
-	return &Pg_magic_data; \
-} \
-extern int no_such_variable
+#define PG_MODULE_MAGIC                                                   \
+  extern PGDLLEXPORT const Pg_magic_struct *PG_MAGIC_FUNCTION_NAME(void); \
+  const Pg_magic_struct *                                                 \
+  PG_MAGIC_FUNCTION_NAME(void)                                            \
+  {                                                                       \
+    static const Pg_magic_struct Pg_magic_data = PG_MODULE_MAGIC_DATA;    \
+    return (&Pg_magic_data);                                              \
+  }                                                                       \
+  extern int no_such_variable
 
 #undef PG_FUNCTION_INFO_V1
-#define PG_FUNCTION_INFO_V1(funcname) \
-extern PGDLLEXPORT const Pg_finfo_record * CppConcat(pg_finfo_,funcname)(void); \
-const Pg_finfo_record * \
-CppConcat(pg_finfo_,funcname) (void) \
-{ \
-	static const Pg_finfo_record my_finfo = { 1 }; \
-	return &my_finfo; \
-} \
-extern int no_such_variable
+#define PG_FUNCTION_INFO_V1(funcname)                            \
+  extern PGDLLEXPORT const Pg_finfo_record *CppConcat(pg_finfo_, \
+    funcname)(void);                                             \
+  const Pg_finfo_record *                                        \
+  CppConcat(pg_finfo_, funcname) (void)                          \
+  {                                                              \
+    static const Pg_finfo_record my_finfo = { 1 };               \
+    return (&my_finfo);                                          \
+  }                                                              \
+  extern int no_such_variable
 
 #else
-#define PGDLLEXPORT	PGDLLIMPORT
+#define PGDLLEXPORT    PGDLLIMPORT
 #endif
 #endif
 
@@ -171,7 +171,8 @@ extern PGDLLEXPORT Datum plunit_assert_equals_range_message(PG_FUNCTION_ARGS);
 extern PGDLLEXPORT Datum plunit_assert_not_equals(PG_FUNCTION_ARGS);
 extern PGDLLEXPORT Datum plunit_assert_not_equals_message(PG_FUNCTION_ARGS);
 extern PGDLLEXPORT Datum plunit_assert_not_equals_range(PG_FUNCTION_ARGS);
-extern PGDLLEXPORT Datum plunit_assert_not_equals_range_message(PG_FUNCTION_ARGS);
+extern PGDLLEXPORT Datum plunit_assert_not_equals_range_message(
+  PG_FUNCTION_ARGS);
 extern PGDLLEXPORT Datum plunit_fail(PG_FUNCTION_ARGS);
 extern PGDLLEXPORT Datum plunit_fail_message(PG_FUNCTION_ARGS);
 
@@ -228,7 +229,7 @@ extern PGDLLEXPORT Datum plvchr_is_kind_a(PG_FUNCTION_ARGS);
 extern PGDLLEXPORT Datum plvchr_char_name(PG_FUNCTION_ARGS);
 extern PGDLLEXPORT Datum oracle_substr2(PG_FUNCTION_ARGS);
 extern PGDLLEXPORT Datum oracle_substr3(PG_FUNCTION_ARGS);
- 
+
 /* from plvsubst.c */
 extern PGDLLEXPORT Datum plvsubst_string_array(PG_FUNCTION_ARGS);
 extern PGDLLEXPORT Datum plvsubst_string_string(PG_FUNCTION_ARGS);
@@ -285,4 +286,5 @@ extern PGDLLEXPORT Datum nvarchar2in(PG_FUNCTION_ARGS);
 extern PGDLLEXPORT Datum nvarchar2out(PG_FUNCTION_ARGS);
 extern PGDLLEXPORT Datum nvarchar2(PG_FUNCTION_ARGS);
 extern PGDLLEXPORT Datum nvarchar2recv(PG_FUNCTION_ARGS);
+
 #endif

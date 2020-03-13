@@ -1,6 +1,32 @@
 %{
-/* 
-** A scanner for EMP-style numeric ranges 
+/* ========================================================================= **
+**                                         ____                              **
+**                       ____  _________ _/ __/_______                       **
+**                      / __ \/ ___/ __ `/ /_/ ___/ _ \                      **
+**                     / /_/ / /  / /_/ / __/ /__/  __/                      **
+**                     \____/_/   \__,_/_/  \___/\___/                       **
+**                                                                           **
+** ========================================================================= **
+**            OPEN-SOURCE IMPLEMENTATION OF THE PL/VISION LIBRARY            **
+** ========================================================================= **
+** Copyright (C) 2008-2020 by Pavel Stehule <pavel.stehule@gmail.com>        **
+** Portions Copyright (C) 1999-2014 Jonah H. Harris <jonah.harris@gmail.com> **
+** Portions Copyright (C) 2014-2020 NEXTGRES, LLC. <oss@nextgres.com>        **
+**                                                                           **
+** Permission to use, copy, modify, and/or distribute this software for any  **
+** purpose with or without fee is hereby granted.                            **
+**                                                                           **
+** THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES  **
+** WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF          **
+** MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR   **
+** ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    **
+** WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN     **
+** ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF   **
+** OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.            **
+** ========================================================================= */
+
+/*
+** A scanner for EMP-style numeric ranges
 */
 
 #include "postgres.h"
@@ -15,31 +41,31 @@
 
 /* Avoid exit() on fatal scanner errors (a bit ugly -- see yy_fatal_error) */
 #undef fprintf
-#define fprintf(file, fmt, msg)  fprintf_to_ereport(fmt, msg)
+#define fprintf(file, fmt, msg)    fprintf_to_ereport(fmt, msg)
 
 static void
-fprintf_to_ereport(const char *fmt, const char *msg)
-{
-	ereport(ERROR, (errmsg_internal("%s", msg)));
+fprintf_to_ereport (
+  const char *fmt,
+  const char *msg
+) {
+  ereport(ERROR, (errmsg_internal("%s", msg)));
 }
 
-static int		xcdepth = 0;	/* depth of nesting in slash-star comments */
-static char    *dolqstart;      /* current $foo$ quote start string */
+static int xcdepth = 0;     /* depth of nesting in slash-star comments */
+static char *dolqstart;     /* current $foo$ quote start string */
 static bool extended_string = false;
 
-
 /* No reason to constrain amount of data slurped */
-#define YY_READ_BUF_SIZE 16777216
+#define YY_READ_BUF_SIZE    16777216
 
 /* Handles to the buffer that the lexer uses internally */
 
-
 static YY_BUFFER_STATE scanbufhandle;
 
-#define SET_YYLLOC()  (orafce_sql_yylval.val.lloc = yytext - scanbuf)                                                                                              
-                                                                                                                                               
-/* Handles to the buffer that the lexer uses internally */                                                                                     
-static char *scanbuf;       
+#define SET_YYLLOC()    (orafce_sql_yylval.val.lloc = yytext - scanbuf)
+
+/* Handles to the buffer that the lexer uses internally */
+static char *scanbuf;
 
 /* flex 2.5.4 doesn't bother with a decl for this */
 
@@ -54,16 +80,16 @@ void orafce_sql_scanner_finish(void);
  * to empty, addlit to add text.  Note that the buffer is palloc'd and
  * starts life afresh on every parse cycle.
  */
-static char	   *literalbuf;		/* expandable buffer */
-static int		literallen;		/* actual current length */
-static int		literalalloc;	/* current allocated buffer size */
+static char *literalbuf;     /* expandable buffer */
+static int literallen;       /* actual current length */
+static int literalalloc;     /* current allocated buffer size */
 
-#define startlit()  (literalbuf[0] = '\0', literallen = 0)
+#define startlit()    (literalbuf[0] = '\0', literallen = 0)
 static void addlit(char *ytext, int yleng);
 static void addlitchar(unsigned char ychar);
 static char *litbufdup(void);
 
-static int	lexer_errposition(void);
+static int lexer_errposition(void);
 
 /*
  * Each call to yylex must set yylloc to the location of the found token
@@ -79,7 +105,7 @@ static char *scanbuf;
 static unsigned char unescape_single_char(unsigned char c);
 
 #ifndef _pg_mbstrlen_with_len
-#define _pg_mbstrlen_with_len(buf,loc) 	pg_mbstrlen_with_len(buf,loc)
+#define _pg_mbstrlen_with_len(buf, loc)    pg_mbstrlen_with_len(buf, loc)
 #endif
 
 %}
@@ -872,15 +898,18 @@ other			.
  * since it depends on scanbuf to still be valid.
  */
 static int
-lexer_errposition(void)
-{
-	int		pos;
+lexer_errposition (
+  void
+) {
+  int pos;
 
-	/* Convert byte offset to character number */
-	pos = _pg_mbstrlen_with_len(scanbuf, orafce_sql_yylval.val.lloc) + 1;
-	/* And pass it to the ereport mechanism */
-	return errposition(pos);
-}
+  /* Convert byte offset to character number */
+  pos = _pg_mbstrlen_with_len(scanbuf, orafce_sql_yylval.val.lloc) + 1;
+  /* And pass it to the ereport mechanism */
+  return (errposition(pos));
+} /* lexer_errposition() */
+
+/* ------------------------------------------------------------------------- */
 
 /*
  * yyerror
@@ -893,102 +922,111 @@ lexer_errposition(void)
  * be misleading!
  */
 void
-orafce_sql_yyerror(List **result, const char *message)
-{
-	const char *loc = scanbuf + orafce_sql_yylval.val.lloc;
+orafce_sql_yyerror (
+  List      **result,
+  const char *message
+) {
+  const char *loc = scanbuf + orafce_sql_yylval.val.lloc;
 
-	if (*loc == YY_END_OF_BUFFER_CHAR)
-	{
-		ereport(ERROR,
-				(errcode(ERRCODE_SYNTAX_ERROR),
-				 errmsg("%s at end of input", _(message)),
-				 lexer_errposition()));
-	}
-	else
-	{
-		ereport(ERROR,
-				(errcode(ERRCODE_SYNTAX_ERROR),
-				 errmsg("%s at or near \"%s\"", _(message), loc),
-				 lexer_errposition()));
-	}
-}
+  if (*loc == YY_END_OF_BUFFER_CHAR) {
+    ereport(ERROR,
+      (errcode(ERRCODE_SYNTAX_ERROR),
+      errmsg("%s at end of input", _(message)),
+      lexer_errposition()));
+  } else {
+    ereport(ERROR,
+      (errcode(ERRCODE_SYNTAX_ERROR),
+      errmsg("%s at or near \"%s\"", _(message), loc),
+      lexer_errposition()));
+  }
+} /* orafce_sql_yyerror() */
 
+/* ------------------------------------------------------------------------- */
 
 /*
  * Called before any actual parsing is done
  */
 void
-orafce_sql_scanner_init(const char *str)
-{
-	Size	slen = strlen(str);
+orafce_sql_scanner_init (
+  const char *str
+) {
+  Size slen = strlen(str);
 
-	/*
-	 * Might be left over after ereport()
-	 */
-	if (YY_CURRENT_BUFFER)
-		yy_delete_buffer(YY_CURRENT_BUFFER);
+  /*
+   * Might be left over after ereport()
+   */
+  if (YY_CURRENT_BUFFER) {
+    yy_delete_buffer(YY_CURRENT_BUFFER);
+  }
 
-	/*
-	 * Make a scan buffer with special termination needed by flex.
-	 */
-	scanbuflen = slen;
-	scanbuf = palloc(slen + 2);
-	memcpy(scanbuf, str, slen);
-	scanbuf[slen] = scanbuf[slen + 1] = YY_END_OF_BUFFER_CHAR;
-	scanbufhandle = yy_scan_buffer(scanbuf, slen + 2);
+  /*
+   * Make a scan buffer with special termination needed by flex.
+   */
+  scanbuflen = slen;
+  scanbuf = palloc(slen + 2);
+  memcpy(scanbuf, str, slen);
+  scanbuf[slen] = scanbuf[slen + 1] = YY_END_OF_BUFFER_CHAR;
+  scanbufhandle = yy_scan_buffer(scanbuf, slen + 2);
 
-	/* initialize literal buffer to a reasonable but expansible size */
-	literalalloc = 128;
-	literalbuf = (char *) palloc(literalalloc);
-	startlit();
+  /* initialize literal buffer to a reasonable but expansible size */
+  literalalloc = 128;
+  literalbuf = (char *) palloc(literalalloc);
+  startlit();
 
-	BEGIN(INITIAL);
-}
+  BEGIN(INITIAL);
+} /* orafce_sql_scanner_init() */
 
+/* ------------------------------------------------------------------------- */
 
 /*
  * Called after parsing is done to clean up after fdate_scanner_init()
  */
 void
-orafce_sql_scanner_finish(void)
-{
-	yy_delete_buffer(scanbufhandle);
-	pfree(scanbuf);
-}
+orafce_sql_scanner_finish (
+  void
+) {
+  yy_delete_buffer(scanbufhandle);
+  pfree(scanbuf);
+} /* orafce_sql_scanner_finish() */
+
+/* ------------------------------------------------------------------------- */
 
 static void
-addlit(char *ytext, int yleng)
-{
-	/* enlarge buffer if needed */
-	if ((literallen+yleng) >= literalalloc)
-	{
-		do {
-			literalalloc *= 2;
-		} while ((literallen+yleng) >= literalalloc);
-		literalbuf = (char *) repalloc(literalbuf, literalalloc);
-	}
-	/* append new data, add trailing null */
-	memcpy(literalbuf+literallen, ytext, yleng);
-	literallen += yleng;
-	literalbuf[literallen] = '\0';
-}
+addlit (
+  char *ytext,
+  int   yleng
+) {
+  /* enlarge buffer if needed */
+  if ((literallen+yleng) >= literalalloc) {
+    do {
+      literalalloc *= 2;
+    } while ((literallen+yleng) >= literalalloc);
+    literalbuf = (char *) repalloc(literalbuf, literalalloc);
+  }
+  /* append new data, add trailing null */
+  memcpy(literalbuf+literallen, ytext, yleng);
+  literallen += yleng;
+  literalbuf[literallen] = '\0';
+} /* addlit() */
 
+/* ------------------------------------------------------------------------- */
 
 static void
-addlitchar(unsigned char ychar)
-{
-	/* enlarge buffer if needed */
-	if ((literallen+1) >= literalalloc)
-	{
-		literalalloc *= 2;
-		literalbuf = (char *) repalloc(literalbuf, literalalloc);
-	}
-	/* append new data, add trailing null */
-	literalbuf[literallen] = ychar;
-	literallen += 1;
-	literalbuf[literallen] = '\0';
-}
+addlitchar (
+  unsigned char ychar
+) {
+  /* enlarge buffer if needed */
+  if ((literallen+1) >= literalalloc) {
+    literalalloc *= 2;
+    literalbuf = (char *) repalloc(literalbuf, literalalloc);
+  }
+  /* append new data, add trailing null */
+  literalbuf[literallen] = ychar;
+  literallen += 1;
+  literalbuf[literallen] = '\0';
+} /* addlitchar() */
 
+/* ------------------------------------------------------------------------- */
 
 /*
  * One might be tempted to write pstrdup(literalbuf) instead of this,
@@ -996,34 +1034,53 @@ addlitchar(unsigned char ychar)
  * already known.
  */
 static char *
-litbufdup(void)
-{
-	char *new;
+litbufdup (
+  void
+) {
+  char *new;
 
-	new = palloc(literallen + 1);
-	memcpy(new, literalbuf, literallen+1);
-	return new;
-}
+  new = palloc(literallen + 1);
+  memcpy(new, literalbuf, literallen+1);
+  return (new);
+} /* litbufdup() */
 
+/* ------------------------------------------------------------------------- */
 
 static unsigned char
-unescape_single_char(unsigned char c)
-{
-	switch (c)
-	{
-		case 'b':
-			return '\b';
-		case 'f':
-			return '\f';
-		case 'n':
-			return '\n';
-		case 'r':
-			return '\r';
-		case 't':
-			return '\t';
-		default:
-			return c;
-	}
-}
+unescape_single_char (
+  unsigned char c
+) {
+  switch (c)
+  {
+    case 'b':
+      {
+        return ('\b');
+      }
 
+    case 'f':
+      {
+        return ('\f');
+      }
+
+    case 'n':
+      {
+        return ('\n');
+      }
+
+    case 'r':
+      {
+        return ('\r');
+      }
+
+    case 't':
+      {
+        return ('\t');
+      }
+
+    default:
+      return (c);
+  }
+} /* unescape_single_char() */
+
+/* :vi set ts=2 et sw=2: */
 

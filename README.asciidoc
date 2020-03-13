@@ -758,3 +758,5 @@ Other contributors:
 * Beena Emerson (b-emerson)
 * Vinayak Pokale
 * Fujii Masao
+* Jonah H. Harris
+

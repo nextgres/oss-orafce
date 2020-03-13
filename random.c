@@ -1,3 +1,29 @@
+/* ========================================================================= **
+**                                         ____                              **
+**                       ____  _________ _/ __/_______                       **
+**                      / __ \/ ___/ __ `/ /_/ ___/ _ \                      **
+**                     / /_/ / /  / /_/ / __/ /__/  __/                      **
+**                     \____/_/   \__,_/_/  \___/\___/                       **
+**                                                                           **
+** ========================================================================= **
+**    OPEN-SOURCE IMPLEMENTATION OF ORACLE DATABASE BUILT-IN DBMS_RANDOM     **
+** ========================================================================= **
+** Copyright (C) 2008-2020 by Pavel Stehule <pavel.stehule@gmail.com>        **
+** Portions Copyright (C) 1999-2014 Jonah H. Harris <jonah.harris@gmail.com> **
+** Portions Copyright (C) 2014-2020 NEXTGRES, LLC. <oss@nextgres.com>        **
+**                                                                           **
+** Permission to use, copy, modify, and/or distribute this software for any  **
+** purpose with or without fee is hereby granted.                            **
+**                                                                           **
+** THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES  **
+** WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF          **
+** MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR   **
+** ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    **
+** WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN     **
+** ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF   **
+** OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.            **
+** ========================================================================= */
+
 /*
  * Note - I don't find any documentation about pseudo random
  * number generator used in Oracle. So the results of these
@@ -31,46 +57,45 @@ PG_FUNCTION_INFO_V1(dbms_random_value_range);
 /* Coefficients in rational approximations. */
 static const double a[] =
 {
-	-3.969683028665376e+01,
-	 2.209460984245205e+02,
-	-2.759285104469687e+02,
-	 1.383577518672690e+02,
-	-3.066479806614716e+01,
-	 2.506628277459239e+00
+  -3.969683028665376e+01,
+  2.209460984245205e+02,
+  -2.759285104469687e+02,
+  1.383577518672690e+02,
+  -3.066479806614716e+01,
+  2.506628277459239e+00
 };
 
 static const double b[] =
 {
-	-5.447609879822406e+01,
-	 1.615858368580409e+02,
-	-1.556989798598866e+02,
-	 6.680131188771972e+01,
-	-1.328068155288572e+01
+  -5.447609879822406e+01,
+  1.615858368580409e+02,
+  -1.556989798598866e+02,
+  6.680131188771972e+01,
+  -1.328068155288572e+01
 };
 
 static const double c[] =
 {
-	-7.784894002430293e-03,
-	-3.223964580411365e-01,
-	-2.400758277161838e+00,
-	-2.549732539343734e+00,
-	 4.374664141464968e+00,
-	 2.938163982698783e+00
+  -7.784894002430293e-03,
+  -3.223964580411365e-01,
+  -2.400758277161838e+00,
+  -2.549732539343734e+00,
+  4.374664141464968e+00,
+  2.938163982698783e+00
 };
 
 static const double d[] =
 {
-	7.784695709041462e-03,
-	3.224671290700398e-01,
-	2.445134137142996e+00,
-	3.754408661907416e+00
+  7.784695709041462e-03,
+  3.224671290700398e-01,
+  2.445134137142996e+00,
+  3.754408661907416e+00
 };
 
-#define LOW 0.02425
-#define HIGH 0.97575
+#define LOW     0.02425
+#define HIGH    0.97575
 
 static double ltqnorm(double p);
-
 
 /*
  * dbms_random.initialize (seed IN BINARY_INTEGER)
@@ -78,14 +103,17 @@ static double ltqnorm(double p);
  *     Initialize package with a seed value
  */
 Datum
-dbms_random_initialize(PG_FUNCTION_ARGS)
-{
-	int seed = PG_GETARG_INT32(0);
+dbms_random_initialize (
+  PG_FUNCTION_ARGS
+) {
+  int seed = PG_GETARG_INT32(0);
 
-	srand(seed);
-	
-	PG_RETURN_VOID();
-}
+  srand(seed);
+
+  PG_RETURN_VOID();
+} /* dbms_random_initialize() */
+
+/* ------------------------------------------------------------------------- */
 
 /*
  * dbms_random.normal() RETURN NUMBER;
@@ -93,15 +121,18 @@ dbms_random_initialize(PG_FUNCTION_ARGS)
  *     Returns random numbers in a standard normal distribution
  */
 Datum
-dbms_random_normal(PG_FUNCTION_ARGS)
-{
-	float8 result;
-	
-	/* need random value from (0..1) */
-	result = ltqnorm(((double) rand() + 1) / ((double) RAND_MAX + 2));
+dbms_random_normal (
+  PG_FUNCTION_ARGS
+) {
+  float8 result;
 
-	PG_RETURN_FLOAT8(result);
-}
+  /* need random value from (0..1) */
+  result = ltqnorm(((double) rand() + 1) / ((double) RAND_MAX + 2));
+
+  PG_RETURN_FLOAT8(result);
+} /* dbms_random_normal() */
+
+/* ------------------------------------------------------------------------- */
 
 /*
  * dbms_random.random() RETURN BINARY_INTEGER;
@@ -109,17 +140,21 @@ dbms_random_normal(PG_FUNCTION_ARGS)
  *     Generate Random Numeric Values
  */
 Datum
-dbms_random_random(PG_FUNCTION_ARGS)
-{
-	int result;
-	/*
-	 * Oracle generator generates numebers from -2^31 and +2^31,
-	 * ANSI C only from 0 .. RAND_MAX,
-	 */
-	result = 2 * (rand() - RAND_MAX / 2);
+dbms_random_random (
+  PG_FUNCTION_ARGS
+) {
+  int result;
 
-	PG_RETURN_INT32(result);
-}
+  /*
+   * Oracle generator generates numebers from -2^31 and +2^31,
+   * ANSI C only from 0 .. RAND_MAX,
+   */
+  result = 2 * (rand() - RAND_MAX / 2);
+
+  PG_RETURN_INT32(result);
+} /* dbms_random_random() */
+
+/* ------------------------------------------------------------------------- */
 
 /*
  * dbms_random.seed(val IN BINARY_INTEGER);
@@ -128,14 +163,17 @@ dbms_random_random(PG_FUNCTION_ARGS)
  *     Reset the seed value
  */
 Datum
-dbms_random_seed_int(PG_FUNCTION_ARGS)
-{
-	int seed = PG_GETARG_INT32(0);
-	
-	srand(seed);
+dbms_random_seed_int (
+  PG_FUNCTION_ARGS
+) {
+  int seed = PG_GETARG_INT32(0);
 
-	PG_RETURN_VOID();
-}
+  srand(seed);
+
+  PG_RETURN_VOID();
+} /* dbms_random_seed_int() */
+
+/* ------------------------------------------------------------------------- */
 
 /*
  * Atention!
@@ -144,17 +182,20 @@ dbms_random_seed_int(PG_FUNCTION_ARGS)
  * don't use text based seed for regres tests!
  */
 Datum
-dbms_random_seed_varchar(PG_FUNCTION_ARGS)
-{
-	text *key = PG_GETARG_TEXT_P(0);
-	Datum seed;
-	
-	seed = hash_any((unsigned char *) VARDATA_ANY(key), VARSIZE_ANY_EXHDR(key));
-	
-	srand((int) seed);
-					
-	PG_RETURN_VOID();
-}
+dbms_random_seed_varchar (
+  PG_FUNCTION_ARGS
+) {
+  text *key = PG_GETARG_TEXT_P(0);
+  Datum seed;
+
+  seed = hash_any((unsigned char *) VARDATA_ANY(key), VARSIZE_ANY_EXHDR(key));
+
+  srand((int) seed);
+
+  PG_RETURN_VOID();
+} /* dbms_random_seed_varchar() */
+
+/* ------------------------------------------------------------------------- */
 
 /*
  * dbms_random.string(opt IN CHAR, len IN NUMBER) RETURN VARCHAR2;
@@ -168,84 +209,108 @@ dbms_random_seed_varchar(PG_FUNCTION_ARGS)
  * 'x','X'  any alpha-numeric characters (upper)
  */
 static text *
-random_string(const char *charset, size_t chrset_size, int len)
-{
-	StringInfo	str;
-	int	i;
-	
-	str = makeStringInfo();
-	for (i = 0; i < len; i++)
-	{
-		int pos = (int) ((double) rand() / ((double) RAND_MAX + 1) * chrset_size);
-		
-		appendStringInfoChar(str, charset[pos]);
-	}
-	
-	return cstring_to_text(str->data);
-}
+random_string (
+  const char *charset,
+  size_t      chrset_size,
+  int         len
+) {
+  StringInfo str;
+  int i;
+
+  str = makeStringInfo();
+  for (i = 0; i < len; i++) {
+    int pos = (int) ((double) rand() / ((double) RAND_MAX + 1) * chrset_size);
+
+    appendStringInfoChar(str, charset[pos]);
+  }
+
+  return (cstring_to_text(str->data));
+} /* random_string() */
+
+/* ------------------------------------------------------------------------- */
 
 Datum
-dbms_random_string(PG_FUNCTION_ARGS)
-{
-	char *option;
-	int	len;
-	const char *charset;
-	size_t chrset_size;
+dbms_random_string (
+  PG_FUNCTION_ARGS
+) {
+  char *option;
+  int len;
+  const char *charset;
+  size_t chrset_size;
 
-	const char *alpha_mixed = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	const char *lower_only = "abcdefghijklmnopqrstuvwxyz";
-	const char *upper_only = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	const char *upper_alphanum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	const char *printable = "`1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVVBNM<>? ";
+  const char *alpha_mixed =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const char *lower_only = "abcdefghijklmnopqrstuvwxyz";
+  const char *upper_only = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const char *upper_alphanum = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const char *printable =
+    "`1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVVBNM<>? ";
 
-	if (PG_ARGISNULL(0) || PG_ARGISNULL(1))
-		ereport(ERROR,
-				(errcode(ERRCODE_NULL_VALUE_NOT_ALLOWED),
-				 errmsg("an argument is NULL")));
+  if (PG_ARGISNULL(0) || PG_ARGISNULL(1)) {
+    ereport(ERROR,
+      (errcode(ERRCODE_NULL_VALUE_NOT_ALLOWED),
+      errmsg("an argument is NULL")));
+  }
 
-	option = text_to_cstring(PG_GETARG_TEXT_P(0));
-	len = PG_GETARG_INT32(1);
-	
-	switch (option[0])
-	{
-		case 'a':
-		case 'A':
-			charset = alpha_mixed;
-			chrset_size = strlen(alpha_mixed);
-			break;
-		case 'l':
-		case 'L':
-			charset = lower_only;
-			chrset_size = strlen(lower_only);
-			break;
-		case 'u':
-		case 'U':
-			charset = upper_only;
-			chrset_size = strlen(upper_only);
-			break;
-		case 'x':
-		case 'X':
-			charset = upper_alphanum;
-			chrset_size = strlen(upper_alphanum);
-			break;
-		case 'p':
-		case 'P':
-			charset = printable;
-			chrset_size = strlen(printable);
-			break;
-			
-		default:
-			ereport(ERROR,
-				(errcode(ERRCODE_INVALID_PARAMETER_VALUE),
-				 errmsg("unknown option '%s'", option),
-				 errhint("available option \"aAlLuUxXpP\"")));
-			/* be compiler a quiete */
-			charset = NULL;
-			chrset_size = 0;
-	}
-	
-	PG_RETURN_TEXT_P(random_string(charset, chrset_size, len));
-}
+  option = text_to_cstring(PG_GETARG_TEXT_P(0));
+  len = PG_GETARG_INT32(1);
+
+  switch (option[0])
+  {
+    case 'a':
+    case 'A':
+      {
+        charset = alpha_mixed;
+        chrset_size = strlen(alpha_mixed);
+      }
+      break;
+
+    case 'l':
+    case 'L':
+      {
+        charset = lower_only;
+        chrset_size = strlen(lower_only);
+      }
+      break;
+
+    case 'u':
+    case 'U':
+      {
+        charset = upper_only;
+        chrset_size = strlen(upper_only);
+      }
+      break;
+
+    case 'x':
+    case 'X':
+      {
+        charset = upper_alphanum;
+        chrset_size = strlen(upper_alphanum);
+      }
+      break;
+
+    case 'p':
+    case 'P':
+      {
+        charset = printable;
+        chrset_size = strlen(printable);
+      }
+      break;
+
+    default:
+      ereport(ERROR,
+        (errcode(ERRCODE_INVALID_PARAMETER_VALUE),
+        errmsg("unknown option '%s'", option),
+        errhint("available option \"aAlLuUxXpP\"")));
+      /* be compiler a quiete */
+      charset = NULL;
+      chrset_size = 0;
+  }
+
+  PG_RETURN_TEXT_P(random_string(charset, chrset_size, len));
+} /* dbms_random_string() */
+
+/* ------------------------------------------------------------------------- */
 
 /*
  * dbms_random.terminate;
@@ -253,11 +318,14 @@ dbms_random_string(PG_FUNCTION_ARGS)
  *     Terminate use of the Package
  */
 Datum
-dbms_random_terminate(PG_FUNCTION_ARGS)
-{
-	/* do nothing */
-	PG_RETURN_VOID();
-}
+dbms_random_terminate (
+  PG_FUNCTION_ARGS
+) {
+  /* do nothing */
+  PG_RETURN_VOID();
+} /* dbms_random_terminate() */
+
+/* ------------------------------------------------------------------------- */
 
 /*
  * dbms_random.value() RETURN NUMBER;
@@ -265,15 +333,18 @@ dbms_random_terminate(PG_FUNCTION_ARGS)
  *     Gets a random number, greater than or equal to 0 and less than 1.
  */
 Datum
-dbms_random_value(PG_FUNCTION_ARGS)
-{
-	float8 result;
-	
-	/* result [0.0 - 1.0) */
-	result = (double) rand() / ((double) RAND_MAX + 1);
-	
-	PG_RETURN_FLOAT8(result);
-}
+dbms_random_value (
+  PG_FUNCTION_ARGS
+) {
+  float8 result;
+
+  /* result [0.0 - 1.0) */
+  result = (double) rand() / ((double) RAND_MAX + 1);
+
+  PG_RETURN_FLOAT8(result);
+} /* dbms_random_value() */
+
+/* ------------------------------------------------------------------------- */
 
 /*
  * dbms_random.value(low  NUMBER, high NUMBER) RETURN NUMBER
@@ -282,20 +353,23 @@ dbms_random_value(PG_FUNCTION_ARGS)
  *     where x is greater than or equal to low and less than high
  */
 Datum
-dbms_random_value_range(PG_FUNCTION_ARGS)
-{
-	float8 low = PG_GETARG_FLOAT8(0);
-	float8 high = PG_GETARG_FLOAT8(1);
-	float8 result;
+dbms_random_value_range (
+  PG_FUNCTION_ARGS
+) {
+  float8 low = PG_GETARG_FLOAT8(0);
+  float8 high = PG_GETARG_FLOAT8(1);
+  float8 result;
 
-	if (low > high)
-		PG_RETURN_NULL();
+  if (low > high) {
+    PG_RETURN_NULL();
+  }
 
-	result = ((double) rand() / ((double) RAND_MAX + 1)) * ( high -  low) + low;
+  result = ((double) rand() / ((double) RAND_MAX + 1)) * (high -  low) + low;
 
-	PG_RETURN_FLOAT8(result);
-}
+  PG_RETURN_FLOAT8(result);
+} /* dbms_random_value_range() */
 
+/* ------------------------------------------------------------------------- */
 
 /*
  * Lower tail quantile for standard normal distribution function.
@@ -317,47 +391,40 @@ dbms_random_value_range(PG_FUNCTION_ARGS)
  * C implementation adapted from Peter's Perl version
  */
 static double
-ltqnorm(double p)
-{
-	double q, r;
+ltqnorm (
+  double p
+) {
+  double q, r;
 
-	errno = 0;
+  errno = 0;
 
-	if (p < 0 || p > 1)
-	{
-		errno = EDOM;
-		return 0.0;
-	}
-	else if (p == 0)
-	{
-		errno = ERANGE;
-		return -HUGE_VAL /* minus "infinity" */;
-	}
-	else if (p == 1)
-	{
-		errno = ERANGE;
-		return HUGE_VAL /* "infinity" */;
-	}
-	else if (p < LOW)
-	{
-		/* Rational approximation for lower region */
-		q = sqrt(-2*log(p));
-		return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) /
-			((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
-	}
-	else if (p > HIGH)
-	{
-		/* Rational approximation for upper region */
-		q  = sqrt(-2*log(1-p));
-		return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) /
-			((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
-	}
-	else
-	{
-		/* Rational approximation for central region */
-		q = p - 0.5;
-		r = q*q;
-		return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q /
-			(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
-	}
-}
+  if ((p < 0) || (p > 1)) {
+    errno = EDOM;
+    return (0.0);
+  } else if (p == 0) {
+    errno = ERANGE;
+    return (-HUGE_VAL /* minus "infinity" */);
+  } else if (p == 1) {
+    errno = ERANGE;
+    return (HUGE_VAL /* "infinity" */);
+  } else if (p < LOW) {
+    /* Rational approximation for lower region */
+    q = sqrt(-2*log(p));
+    return ((((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) /
+           ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1));
+  } else if (p > HIGH) {
+    /* Rational approximation for upper region */
+    q = sqrt(-2*log(1-p));
+    return (-(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) /
+           ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1));
+  } else {
+    /* Rational approximation for central region */
+    q = p - 0.5;
+    r = q*q;
+    return ((((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q /
+           (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1));
+  }
+} /* ltqnorm() */
+
+/* :vi set ts=2 et sw=2: */
+
