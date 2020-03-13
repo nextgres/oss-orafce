@@ -36,7 +36,7 @@ At a high-level, this extension should:
 
 * **Support Migration from Oracle Database** - Applications written for use with Oracle Database should be significantly esaier to migrate to Postgres using the features provided by this extension.
 * **Support Migration to Oracle Database** - An application written for Postgres, using the features provided by this extension in lieu of Postgres-specific ones, should be significantly easier to migrate to Oracle Database.
-* **Compliment Existing Oracle Environments** - Most enterprises have deployed multiple database systems, open source and commercial. The features provided by this extension should provide DBAs and developers with a level of database agnosticism that makes it interact with Oracle or Postgres.
+* **Compliment Existing Oracle Environments** - Most enterprises have deployed multiple database systems, open source and commercial. The features provided by this extension should provide DBAs and developers with a level of database agnosticism and general familiarity that simplifies interaction with Oracle and Postgres.
 * **Target Common Features Only** - Statistically, studies indicate only twenty to thirty percent of an application's features are frequently used. While Oracle Database contains a lot of cool features, this is an unfunded open source project. Unless an implementation is sponsored, follow the [Pareto Principle](https://en.wikipedia.org/wiki/Pareto_principle#In_computing) and prioritize implementations by frequency of utilization.
 
 ---
@@ -173,9 +173,11 @@ See the [License](./COPYRIGHT.orafce).
 
 ## Contributors
 
-The project was founded in 2008 by Pavel Stehule. Considerable additional development has been added to this project by Jonah H. Harris and NEXTGRES, LLC.
+The project was founded in 2008 by Pavel Stehule.
 
-For a full list of contributors, see [License](./COPYRIGHT.orafce).
+Considerable additional development has been added to this project by Jonah H. Harris and NEXTGRES, LLC.
+
+You can find a full list of contributors [here](./COPYRIGHT.orafce).
 
 ---
 
