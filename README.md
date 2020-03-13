@@ -57,61 +57,6 @@ Additionally, this extension provides the following features not included in Ora
 
 ---
 
-## Installation
-
-This extension is normally distributed as a PostgreSQL "contrib" module. To install it from a pre-configured source tree run the following commands as a user with appropriate privileges from the orafce source directory:
-
-```
-export NO_PGXS=1
-make
-make install
-```
-
-Alternatively, if you have no source tree you can install using PGXS. Simply
-run the following commands the adminpack source directory:
-
-```
-make
-make install
-```
-
-To install Orafce functions in the database, either run the orafce.sql script 
-using the pgAdmin SQL tool (and then close and reopen the connection to the 
-freshly instrumented server), or run the script using psql, eg:
-
-```
-CREATE EXTENSION orafce;
-```
-
-Other administration tools that use this module may have different requirements,
-please consult the tool's documentation for further details.
-
-This package requires PostgreSQL 9.4 or later.
-
----
-
-## Configuration
-
-Contents of this repository include documentation as well as example modules to support the following areas:
-
----
-
-## Usage
-
-This extension provides Postgres-native implementations of the following features compatible with Oracle Database:
-
-* [Data Types](#built-in-data-types)
-* [SQL Functions](#built-in-sql-functions)
-* [PL/SQL Packages](#built-in-plsql-packages)
-* [Schema Objects](#built-in-schema-objects)
-
-Additionally, this extension provides the following features not included in Oracle Database:
-
-* [PL/Vision Compatible Library](#plvision-library) - A subset of Steven Feuerstein's once-popular library of PL/SQL functions ported to Postgres.
-* [PL/Unit Compatible Testing Framework](#plunit-framework) - A minimal implementation of the lightweight PL/SQL unit testing package ported to Postgres.
-
----
-
 ### Built-in Data Types
 
 This extension provides the following Postgres-native implementations of data types similar to, and compatible with, Oracle Database.
@@ -160,6 +105,53 @@ Originally developed by well-known PL/SQL expert Steven Feuerstein, PL/Vision wa
 ### PL/Unit Framework
 
 [PL/Unit](https://plunit.com/) is a lightweight unit testing framework that provides the functionality to create unit tests for PL/SQL code. This extension includes a minimal implementation ported to Postgres.
+
+---
+
+## Installation
+
+This extension is normally distributed as a PostgreSQL "contrib" module. To install it from a pre-configured source tree run the following commands as a user with appropriate privileges from the orafce source directory:
+
+```
+export NO_PGXS=1
+make
+make install
+```
+
+Alternatively, if you have no source tree you can install using PGXS. Simply
+run the following commands the adminpack source directory:
+
+```
+make
+make install
+```
+
+To install Orafce functions in the database, either run the orafce.sql script 
+using the pgAdmin SQL tool (and then close and reopen the connection to the 
+freshly instrumented server), or run the script using psql, eg:
+
+```
+CREATE EXTENSION orafce;
+```
+
+Other administration tools that use this module may have different requirements,
+please consult the tool's documentation for further details.
+
+This package requires PostgreSQL 9.4 or later.
+
+---
+
+## Configuration
+
+This module supports the following configuration options:
+
+* `orafce.nls_date_format` (string) - Emulate the DATE data type output behavior in Oracle Database. (default = NULL)
+* `orafce.timezone` (string) - The time zone to use for the SYSDATE function. (default = GMT)
+* `orafce.varchar2_null_safe_concat` (boolean) ** - Emulate NULL as an empty string during character string concatenation similar to Oracle Database. (default = false)
+
+---
+
+## Usage
 
 ---
 
