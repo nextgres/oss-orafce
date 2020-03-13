@@ -59,7 +59,34 @@ Additionally, this extension provides the following features not included in Ora
 
 ## Installation
 
+This extension is normally distributed as a PostgreSQL "contrib" module. To install it from a pre-configured source tree run the following commands as a user with appropriate privileges from the orafce source directory:
 
+```
+export NO_PGXS=1
+make
+make install
+```
+
+Alternatively, if you have no source tree you can install using PGXS. Simply
+run the following commands the adminpack source directory:
+
+```
+make
+make install
+```
+
+To install Orafce functions in the database, either run the orafce.sql script 
+using the pgAdmin SQL tool (and then close and reopen the connection to the 
+freshly instrumented server), or run the script using psql, eg:
+
+```
+CREATE EXTENSION orafce;
+```
+
+Other administration tools that use this module may have different requirements,
+please consult the tool's documentation for further details.
+
+This package requires PostgreSQL 9.4 or later.
 
 ---
 
@@ -167,7 +194,7 @@ A few questions and answers.
 
 ## License
 
-See the [License](./COPYRIGHT.orafce).
+See the [License](LICENSE).
 
 ---
 
@@ -177,7 +204,7 @@ The project was founded in 2008 by Pavel Stehule.
 
 Considerable additional development has been added to this project by Jonah H. Harris and NEXTGRES, LLC.
 
-You can find a full list of contributors [here](./COPYRIGHT.orafce).
+A full list of contributors can be found [here](AUTHORS).
 
 ---
 
@@ -190,3 +217,5 @@ You can find a full list of contributors [here](./COPYRIGHT.orafce).
 ### Tools
 
 ### Documentation
+
+* [Detailed Changelog](CHANGELOG.md)

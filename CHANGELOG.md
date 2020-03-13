@@ -1,4 +1,5 @@
-Orafce News - History of user-visible changes
+# Extension Changelog
+
 Copyright (C) 2008-2016  Orafce Global Development Group
 
 Version 3.9.0 - 
@@ -56,3 +57,4 @@ Version 3.0.5 - X Dec 2012
 
 * PostgreSQL 9.1/9.2 compilation
 * ... TODO ...
+
