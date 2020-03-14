@@ -1,0 +1,11 @@
+set(SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/aggregate.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/charlen.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/charpad.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/convert.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/datefce.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/others.c
+)
+
+target_sources(${PROJECT_NAME} PRIVATE ${SOURCES})
+

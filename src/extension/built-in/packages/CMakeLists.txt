@@ -1,0 +1,7 @@
+add_subdirectory(dbms_alert)
+add_subdirectory(dbms_assert)
+add_subdirectory(dbms_output)
+add_subdirectory(dbms_pipe)
+add_subdirectory(dbms_random)
+add_subdirectory(dbms_utility)
+add_subdirectory(utl_file)
