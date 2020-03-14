@@ -91,6 +91,7 @@ This extension provides the following Postgres-native implementations of PL/SQL 
 | [`DBMS_OUTPUT`](documentation/docs/built-in/packages/DBMS_OUTPUT.md) | Provides functionality for buffering messages. |
 | [`DBMS_PIPE`](documentation/docs/built-in/packages/DBMS_PIPE.md) | Provides functionality for sending messages between sessions through a pipe. |
 | [`DBMS_RANDOM`](documentation/docs/built-in/packages/DBMS_RANDOM.md) | Provides functionality for generating random values. |
+| [`DBMS_SQL`](documentation/docs/built-in/packages/DBMS_SQL.md) | Provides functionality for handling dynamic SQL. |
 | [`DBMS_UTILITY`](documentation/docs/built-in/packages/DBMS_UTILITY.md) | Provides miscellaneous functionality. |
 | [`UTL_FILE`](documentation/docs/built-in/packages/UTL_FILE.md) | Provides functionality for reading from, and writing to, operating system files. |
 
